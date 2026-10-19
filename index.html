@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para ti ❤</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,400;1,600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noche:#2a1230;
+    --ciruela:#4a1d4f;
+    --rosa:#ff6b8b;
+    --rubor:#ffc2d1;
+    --crema:#fff1ea;
+    --oro:#f5c26b;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{
+    font-family:'DM Sans',system-ui,sans-serif;
+    color:var(--crema);
+    background:radial-gradient(120% 90% at 50% 100%,var(--ciruela) 0%,var(--noche) 70%);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;text-align:center;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+  main{padding:24px;max-width:520px;position:relative;z-index:2}
+  h1{
+    font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;
+    font-size:clamp(2.2rem,8vw,3.6rem);line-height:1.1;color:var(--rubor);
+  }
+  p.sub{margin:14px 0 34px;font-size:1.05rem;color:var(--crema);opacity:.85}
+  button{
+    all:unset;cursor:pointer;display:inline-block;border-radius:50%;
+    padding:10px;transition:transform .15s ease;
+  }
+  button:active{transform:scale(.9)}
+  button:focus-visible{outline:3px solid var(--oro);outline-offset:4px}
+  .corazon{width:clamp(150px,42vw,210px);height:auto;filter:drop-shadow(0 10px 30px rgba(255,107,139,.55));animation:latido 1.6s ease-in-out infinite}
+  @keyframes latido{0%,100%{transform:scale(1)}15%{transform:scale(1.08)}30%{transform:scale(1)}45%{transform:scale(1.05)}}
+  .contador{margin-top:26px;font-family:'Fraunces',serif;font-style:italic;font-size:1.15rem;color:var(--oro);min-height:1.6em}
+  .flota{
+    position:fixed;pointer-events:none;z-index:5;white-space:nowrap;
+    font-family:'Fraunces',serif;font-style:italic;color:var(--rubor);
+    animation:sube var(--dur) ease-out forwards;
+    text-shadow:0 2px 12px rgba(42,18,48,.8);
+  }
+  @keyframes sube{
+    0%{opacity:0;transform:translate(-50%,0) scale(.4)}
+    15%{opacity:1}
+    100%{opacity:0;transform:translate(calc(-50% + var(--dx)),-260px) scale(1.2) rotate(var(--rot))}
+  }
+  #final{
+    position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;
+    padding:30px;background:rgba(42,18,48,.92);opacity:0;pointer-events:none;transition:opacity .6s;
+  }
+  #final.ver{opacity:1;pointer-events:auto}
+  #final div{max-width:440px}
+  #final h2{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.8rem,6vw,2.6rem);color:var(--rubor);margin-bottom:16px}
+  #final p{line-height:1.6;font-size:1.05rem}
+  #final small{display:block;margin-top:22px;opacity:.6;cursor:pointer}
+  @media (prefers-reduced-motion:reduce){.corazon{animation:none}.flota{animation-duration:1.5s!important}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Holaa <span id="nombre">Mi niña preciosaa</span></h1>
+  <p class="sub">Toca mi corazon</p>
+
+  <button id="btn" aria-label="Tocar el corazón">
+    <svg class="corazon" viewBox="0 0 100 90" aria-hidden="true">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff8fa8"/><stop offset="1" stop-color="#e0305a"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#g)" d="M50 86 C14 58 2 38 2 24 C2 11 12 2 25 2 C36 2 45 8 50 17 C55 8 64 2 75 2 C88 2 98 11 98 24 C98 38 86 58 50 86Z"/>
+      <path fill="#fff" opacity=".28" d="M20 14 C13 16 10 24 12 30 C13 22 18 18 24 18 C26 15 24 13 20 14Z"/>
+    </svg>
+  </button>
+
+  <div class="contador" id="cont"></div>
+</main>
+
+<div id="final">
+  <div>
+    <h2>Te amo muchisimoooooooo!!!</h2>
+    <p>Gracias por siempre estar conmigo mi corazon te pertenece a ti , eres lo mejor que me ah pasado y eres la niña de mi corazon,te amo muchisimooooo</p>
+    <small id="cerrar">Pulsa aqui para seguir tocando mi corazon</small>
+  </div>
+</div>
+
+<script>
+  const NOMBRE = "mi niña preciosa";
+
+  document.getElementById("nombre").textContent = NOMBRE;
+
+  const frases = ["te amoo mi niña","te amo mi estrellita","eres mi vida","eres mi mundo","eres mi novia preciosa","amo todo de ti","te amo mucho mi niña","Gracias por siempre estar conmigo","Gracais por ser la luz de mi oscuridad","Gracias por tus abrazos y besos","Eres la mejor novia"];
+  const emojis = ["💗","💗","💗","💗","💗"];
+  const btn = document.getElementById("btn");
+  const cont = document.getElementById("cont");
+  const final = document.getElementById("final");
+  let toques = 0;
+
+  function flotar(x, y, texto, tam){
+    const el = document.createElement("span");
+    el.className = "flota";
+    el.textContent = texto;
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.style.fontSize = tam + "px";
+    el.style.setProperty("--dx", (Math.random()*160-80) + "px");
+    el.style.setProperty("--rot", (Math.random()*40-20) + "deg");
+    el.style.setProperty("--dur", (1.8 + Math.random()*1.2) + "s");
+    document.body.appendChild(el);
+    el.addEventListener("animationend", () => el.remove());
+  }
+
+  function lanzar(x, y){
+    const n = 5 + Math.floor(Math.random()*4);
+    for(let i=0;i<n;i++){
+      const ox = x + (Math.random()*80-40);
+      const oy = y + (Math.random()*30-15);
+      flotar(ox, oy, emojis[Math.floor(Math.random()*emojis.length)], 20 + Math.random()*22);
+    }
+    flotar(x, y - 20, frases[Math.floor(Math.random()*frases.length)], 24 + Math.random()*8);
+  }
+
+  btn.addEventListener("click", (e) => {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX || r.left + r.width/2;
+    const y = e.clientY || r.top + r.height/2;
+    lanzar(x, y);
+    toques++;
+    cont.textContent = toques === 1 ? "1 te amo" : toques + " te amo";
+    if(toques === 10) setTimeout(() => final.classList.add("ver"), 600);
+  });
+
+  document.getElementById("cerrar").addEventListener("click", () => final.classList.remove("ver"));
+</script>
+</body>
+</html>
